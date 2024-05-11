@@ -1,0 +1,1 @@
+ALTER TABLE rooms ADD `pot` integer DEFAULT 0 NOT NULL;
