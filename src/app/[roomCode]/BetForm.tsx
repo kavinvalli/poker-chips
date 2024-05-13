@@ -16,7 +16,7 @@ import { socket } from "@/lib/socket";
 import { betSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InferSelectModel } from "drizzle-orm";
-import { X } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
@@ -94,20 +94,43 @@ export default function BetForm({
           name="chips"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{field.value}</FormLabel>
-              <FormControl>
-                <Slider
-                  min={maxChips === 0 ? 0 : 5}
-                  max={maxChips}
-                  step={5}
-                  {...field}
-                  value={[field.value]}
-                  defaultValue={[field.value]}
-                  onValueChange={(val: number[]) => {
-                    field.onChange(+val[0]);
+              <div className="flex justify-center items-center">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    field.onChange(field.value === 5 ? 5 : field.value - 5);
                   }}
-                />
-              </FormControl>
+                  type="button"
+                >
+                  <Minus />
+                </Button>
+                <FormControl>
+                  <Slider
+                    min={maxChips === 0 ? 0 : 5}
+                    max={maxChips}
+                    step={5}
+                    {...field}
+                    value={[field.value]}
+                    defaultValue={[field.value]}
+                    onValueChange={(val: number[]) => {
+                      field.onChange(+val[0]);
+                    }}
+                  />
+                </FormControl>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    field.onChange(
+                      field.value === maxChips ? maxChips : field.value + 5,
+                    );
+                  }}
+                  type="button"
+                >
+                  <Plus />
+                </Button>
+              </div>
               <FormMessage />
             </FormItem>
           )}
@@ -120,7 +143,7 @@ export default function BetForm({
           )}
         />
         <Button type="submit" className="w-full mt-2">
-          Bet
+          Bet {form.watch("chips")}
         </Button>
       </form>
     </Form>
